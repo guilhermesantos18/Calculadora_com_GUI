@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.font as font
+listanum = []
 
 
 def digitar_0():
@@ -25,21 +26,23 @@ def digitar_a():
     valor_a = '+'
     print(valor_a)
     global num_1
-    if valor_a:
-        num_1 = int(''.join([valor_1, valor_0]))
-        print(num_1)
+    num_1 = int(''.join([valor_1, valor_0]))
+    listanum.append(num_1)
+    print(num_1)
 
 
 def res():
-    global resu
+    resultado = 0
     ecra.insert(30, '=')
     valor_i = '='
     print(valor_i)
     if valor_i:
         num_2 = int(''.join([valor_1, valor_0]))
-        resu = num_1 + num_2
-        print(resu)
-    ecra.insert(30, resu)
+        listanum.append(num_2)
+    print(listanum)
+    for num in listanum:
+        resultado += num
+    ecra.insert(30, resultado)
 
 
 # Configurações da janela principal, tamanho, titulo, configurações
@@ -75,7 +78,7 @@ btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBC
 btn_i = tk.Button(text='=', width=5, relief=tk.GROOVE, borderwidth=2, bg='#66C4F2', font=font, command=res)
 
 # Adicionar icon ao botão delete
-icon_delete = tk.PhotoImage(file='C:\Programação e Projetos\Python\Tkinter\Calculadora com interface gráfica\Icon\outline_backspace_black_24dp.gif')
+icon_delete = tk.PhotoImage(file='C:\Programação e Projetos\Python\Tkinter\Calculadora_com_GUI\Icon\outline_backspace_black_24dp.gif')
 
 # Outros Botões
 # (n - positvo ou negativo)
@@ -85,7 +88,7 @@ icon_delete = tk.PhotoImage(file='C:\Programação e Projetos\Python\Tkinter\Cal
 # (pd - parênteses direito)
 btn_n = tk.Button(text='+/-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_v = tk.Button(text=',', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
-btn_d = tk.Button(text='del', width=44, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', image=icon_delete, command=delete)
+btn_d = tk.Button(width=44, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', image=icon_delete, command=delete)
 btn_pe = tk.Button(text='(', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_pd = tk.Button(text=')', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 
