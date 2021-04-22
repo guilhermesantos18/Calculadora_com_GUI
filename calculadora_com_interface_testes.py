@@ -1,76 +1,8 @@
 import tkinter as tk
+from tkinter import END
 import tkinter.font as font
 listanum = []
-
-
-def digitar_0():
-    ecra.insert(30, 0)
-    global valor_0
-    valor_0 = str(0)
-    print(valor_0)
-    # Verificar se foi atingido o número máximo de numeros no ecra
-    # Se isso acontecer apaga tudo
-    if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
-
-
-def digitar_1():
-    ecra.insert(30, 1)
-    global valor_1
-    valor_1 = str(1)
-    print(valor_1)
-    # Verificar se foi atingido o número máximo de numeros no ecra
-    # Se isso acontecer apaga tudo
-    if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
-
-
-def digitar_2():
-    ecra.insert(30, 2)
-    global valor_2
-    valor_2 = str(2)
-    print(valor_2)
-    # Verificar se foi atingido o número máximo de numeros no ecra
-    # Se isso acontecer apaga tudo
-    if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
-
-
-def delete():
-    ecra.delete(0)
-
-
-def digitar_a():
-    ecra.insert(30, '+')
-    valor_a = '+'
-    print(valor_a)
-    global num_1
-    num_1 = int(''.join([valor_1, valor_0]))
-    listanum.append(num_1)
-    print(num_1)
-    # Verificar se foi atingido o número máximo de numeros no ecra
-    # Se isso acontecer apaga tudo
-    if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
-
-
-def res():
-    resultado = 0
-    ecra.insert(30, '=')
-    valor_i = '='
-    print(valor_i)
-    if valor_i:
-        num_2 = int(''.join([valor_1, valor_0]))
-        listanum.append(num_2)
-    print(listanum)
-    for num in listanum:
-        resultado += num
-    ecra.insert(30, resultado)
-    # Verificar se foi atingido o número máximo de numeros no ecra
-    # Se isso acontecer apaga tudo
-    if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
-
+global verificar_a
 
 # Configurações da janela principal, tamanho, titulo, configurações
 # das linha, das colunas e da fonte
@@ -81,18 +13,67 @@ janela_principal.rowconfigure([0, 1, 2, 3, 4], minsize=37)
 # Não permitir que a janela seja extendida
 janela_principal.resizable(False, False)
 font = font.Font(size=10)
+# Ecrâ Calculadora
+ecra = tk.Entry(width=25, relief=tk.GROOVE, borderwidth=2, justify=tk.RIGHT, font=font)
+
+
+def inserir_numeros(numero):
+    atual = ecra.get()
+    ecra.delete(0, END)
+    ecra.insert(0, str(atual) + str(numero))
+
+
+def delete():
+    ecra.delete(0, END)
+
+
+def digitar_a():
+    global verificar_a
+    ecra.insert(0, '+')
+    valor_a = '+'
+    print(valor_a)
+    primeiro_numero = str(ecra.get())
+    verificar_a = str(ecra.get())
+    numero_a = primeiro_numero.count('+')
+    if numero_a >= 1:
+        for i in valor_a:
+            primeiro_numero = primeiro_numero.replace(i, '')
+            listanum.append(int(primeiro_numero))
+    ecra.delete(0, END)
+    print(listanum)
+    # Verificar se foi atingido o número máximo de numeros no ecra
+    # Se isso acontecer apaga tudo
+    if len(ecra.get()) >= 25:
+        ecra.delete(0, 25)
+
+
+def res():
+    # listanum.append(ecra.get())
+    resultado = 0
+    ecra.insert(0, '=')
+    valor_i = '='
+    print(valor_i)
+    if '+' in verificar_a:
+        for num in listanum:
+            resultado += num
+    ecra.insert(0, resultado)
+    # Verificar se foi atingido o número máximo de numeros no ecra
+    # Se isso acontecer apaga tudo
+    if len(ecra.get()) >= 25:
+        ecra.delete(0, 25)
+
 
 # Botões numéricos
-btn_0 = tk.Button(text='0', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=digitar_0)
-btn_1 = tk.Button(text='1', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=digitar_1)
-btn_2 = tk.Button(text='2', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=digitar_2)
-btn_3 = tk.Button(text='3', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font)
-btn_4 = tk.Button(text='4', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font)
-btn_5 = tk.Button(text='5', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font)
-btn_6 = tk.Button(text='6', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font)
-btn_7 = tk.Button(text='7', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font)
-btn_8 = tk.Button(text='8', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font)
-btn_9 = tk.Button(text='9', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font)
+btn_0 = tk.Button(text='0', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(0))
+btn_1 = tk.Button(text='1', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(1))
+btn_2 = tk.Button(text='2', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(2))
+btn_3 = tk.Button(text='3', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(3))
+btn_4 = tk.Button(text='4', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(4))
+btn_5 = tk.Button(text='5', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(5))
+btn_6 = tk.Button(text='6', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(6))
+btn_7 = tk.Button(text='7', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(7))
+btn_8 = tk.Button(text='8', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(8))
+btn_9 = tk.Button(text='9', width=5, relief=tk.GROOVE, borderwidth=2, bg='white', font=font, command=lambda:inserir_numeros(9))
 
 # Botões de operação
 # (x - multiplacação)
@@ -121,8 +102,6 @@ btn_d = tk.Button(width=44, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', image
 btn_pe = tk.Button(text='(', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_pd = tk.Button(text=')', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 
-# Ecrâ Calculadora
-ecra = tk.Entry(width=25, relief=tk.GROOVE, borderwidth=2, justify=tk.RIGHT, font=font)
 
 # Botões numéricos posicionados
 btn_0.grid(row=5, column=1, ipady=5, padx=2)
