@@ -32,6 +32,7 @@ def digitar_a():
     valor_a = '+'
     numeros = str(ecra.get())
     global numero_a
+    numero_a = 0
     numero_a = numeros.count('+')
     if numero_a >= 1:
         for i in valor_a:
@@ -41,7 +42,7 @@ def digitar_a():
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
+        ecra.delete(0, END)
 
 
 def digitar_s():
@@ -51,7 +52,6 @@ def digitar_s():
     numeros = str(ecra.get())
     global numero_s
     numero_s = numeros.count('-')
-    print(numero_s)
     if numero_s >= 1:
         for i in valor_s:
             numeros = numeros.replace(i, '')
@@ -60,7 +60,7 @@ def digitar_s():
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
+        ecra.delete(0, END)
 
 
 def res():
@@ -85,7 +85,7 @@ def res():
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
-        ecra.delete(0, 25)
+        ecra.delete(0, END)
 
 
 # Botões numéricos
