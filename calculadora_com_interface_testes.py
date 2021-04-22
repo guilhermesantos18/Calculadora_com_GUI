@@ -4,6 +4,7 @@ import tkinter.font as font
 
 listanum = []
 
+
 # Configurações da janela principal, tamanho, titulo, configurações
 # das linha, das colunas e da fonte
 janela_principal = tk.Tk()
@@ -32,7 +33,6 @@ def digitar_a():
     valor_a = '+'
     numeros = str(ecra.get())
     global numero_a
-    numero_a = 0
     numero_a = numeros.count('+')
     if numero_a >= 1:
         for i in valor_a:
