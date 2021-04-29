@@ -28,60 +28,85 @@ def delete():
     ecra.delete(0, END)
 
 
-def digitar_a():
-    ecra.insert(0, '+')
-    valor_a = '+'
-    numeros = str(ecra.get())
-    global numero_a
-    numero_a = numeros.count('+')
-    if numero_a >= 1:
-        for i in valor_a:
-            numeros = numeros.replace(i, '')
-            listanum.append(int(numeros))
+def digitar_a(adicao):
+    num_a = 0
+    atual = ecra.get()
     ecra.delete(0, END)
+    ecra.insert(0, str(atual) + adicao)
+    atual_a = ecra.get()
+    for num in atual_a:
+        if num == '+':
+            num_a += 1
+    print(num_a)
+    if num_a >= 1:
+        um_a(num_a)
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
         ecra.delete(0, END)
 
 
-def digitar_s():
-    ecra.insert(0, '-')
-    valor_s = '-'
-    print(valor_s)
-    numeros = str(ecra.get())
-    global numero_s
-    numero_s = numeros.count('-')
-    if numero_s >= 1:
-        for i in valor_s:
-            numeros = numeros.replace(i, '')
-            listanum.append(int(numeros))
+def digitar_s(subtracao):
+    num_s = 1
+    atual = ecra.get()
     ecra.delete(0, END)
+    ecra.insert(0, str(atual) + subtracao)
+    for num in atual:
+        if num == '-':
+            num_s += 1
+    if num_s == 1:
+        um_s(num_s)
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
         ecra.delete(0, END)
+
+
+def um_a(num_a):
+    global index_a1
+    if num_a == 1:
+        atual = str(ecra.get())
+        index_a1 = atual.index('+')
+        listanum.append(atual[:index_a1])
+        listanum.append('+')
+    elif num_a > 1:
+        atual = str(ecra.get())
+        index_a2 = atual.index('+')
+        listanum.append(atual[index_a1+1:index_a2])
+        listanum.append('+')
+    print(listanum)
+
+
+def um_s(num_s):
+    if num_s == 1:
+        atual = str(ecra.get())
+        print(atual)
+        index_s = atual.index('-')
+        listanum.append(atual[:index_s])
+    print(listanum)
+
 
 
 def res():
     resultado = 0
     ecra.insert(0, '=')
     valor_i = '='
-    numeros = str(ecra.get())
-    numero_i = numeros.count('=')
-    if numero_i == 1:
-        for a in valor_i:
-            numeros = numeros.replace(a, '')
-            listanum.append(int(numeros))
-    ecra.delete(0, END)
-    if numero_a >= 1:
-        for num in listanum:
-            resultado += num
-    elif numero_s >= 1:
-        resultado = listanum[0]
-        for num in listanum[1:]:
-            resultado -= num
-    ecra.insert(0, resultado)
+
+    # if numero_a >= 1:
+    #     print('ola')
+    #     for num in numeros:
+    #         if num.isnumeric():
+    #             listanum.append(int(num))
+    #         elif num == '+':
+    #             listanum.append(num)
+
+    print(listanum)
+    # numero_i = numeros.count('=')
+    # if numero_i == 1:
+    #     for a in valor_i:
+    #         numeros = numeros.replace(a, '')
+    #         listanum.append(int(numeros))
+    # ecra.delete(0, END)
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
@@ -118,8 +143,8 @@ btn_9 = tk.Button(text='9', width=5, relief=tk.GROOVE, borderwidth=2, bg='white'
 # (div - divisão)
 btn_div = tk.Button(text=':', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_x = tk.Button(text='x', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
-btn_s = tk.Button(text='-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=digitar_s)
-btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=digitar_a)
+btn_s = tk.Button(text='-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_s('-'))
+btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_a('+'))
 btn_i = tk.Button(text='=', width=5, relief=tk.GROOVE, borderwidth=2, bg='#66C4F2', font=font, command=res)
 
 # Adicionar icon ao botão delete
