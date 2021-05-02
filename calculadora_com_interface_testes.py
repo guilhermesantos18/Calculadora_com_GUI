@@ -51,7 +51,8 @@ def digitar_s(subtracao):
     atual = ecra.get()
     ecra.delete(0, END)
     ecra.insert(0, str(atual) + subtracao)
-    for num in atual:
+    atual_s = ecra_get()
+    for num in atual_s:
         if num == '-':
             num_s += 1
     if num_s == 1:
