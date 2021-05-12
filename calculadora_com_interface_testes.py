@@ -2,8 +2,7 @@ import tkinter as tk
 from tkinter import END
 import tkinter.font as font
 
-listanum1 = []
-listanum2 = []
+listanum = []
 
 
 # Configurações da janela principal, tamanho, titulo, configurações
@@ -29,8 +28,10 @@ def inserir_numeros(numero):
         ecra.delete(0, END)
 
 
+# Limpar o ecra da calculadora e limpar a lista
 def delete():
     ecra.delete(0, END)
+    listanum.clear()
 
 
 def digitar_a(adicao):
@@ -55,27 +56,19 @@ def digitar_s(subtracao):
         ecra.delete(0, END)
 
 
-def listanumeros_separados2(listanum2):
-    # Pegar todas as posições dos operadores
-    print(listanum2)
-    lista_pos_operadores = []
-    for pos in range(0, len(listanum2)):
-        if listanum2[pos] == '+':
-            lista_pos_operadores.append(pos)
-    print(lista_pos_operadores)
-
-
-
 def listanumeros_separados1(atual):
     # Verificar as posições de os operadores e adicionar os números
     # entre os operadores e guarda-los numa lista
     print(atual)
+    cont_operadores = 0
     lista_pos_operadores = []
     # Se existir um + em atual
     if '+' in atual:
         # Pegar todas as posições dos operadores
         for pos in range(0, len(atual)):
             if atual[pos] == '+':
+                # Contador para ajudar na adição de os números há lista entre os operadores
+                cont_operadores += 1
                 lista_pos_operadores.append(pos)
 
         # Para cada posição dos operadores, vou verificar se a sua posição,
@@ -85,26 +78,48 @@ def listanumeros_separados1(atual):
         # a primeira posição e a última posição serão adicionados a outra lista.
         for pos_mais in lista_pos_operadores:
             if pos_mais == atual.index('+'):
-                listanum1.append(atual[:pos_mais])
+                listanum.append(atual[:pos_mais])
+                # Entra aqui nesta situação 10+15 só existe um mais e com esta condição consigu,
+                # Com que adicione o número há direita do primeiro mais seja adicionado há lista
+                if cont_operadores == 1:
+                    listanum.append(atual[pos_mais + 1:])
+                # Entra aqui nesta situação 10+15+16 só existem dois mais e com esta condição consigu,
+                # Com que adicione o número entre primeiro mais e o último mais seja adicionado há lista
+                elif cont_operadores == 2:
+                    listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
+            # Senão se a posição de o último operador for igual ao último valor de lista_pos_operadores
+            # adiciona dessa posição (pos_mais) até ao fim
             elif pos_mais == lista_pos_operadores[-1]:
-                listanum1.append(atual[pos_mais + 1:])
+                listanum.append(atual[pos_mais + 1:])
             elif pos_mais > atual.index('+') and pos_mais < lista_pos_operadores[-1]:
-                # Adicionar só um indice há listanum2
-                if pos_mais == lista_pos_operadores[1]:
-                    listanum2.append(atual[atual.index('+')+1:lista_pos_operadores[-1]])
-                    listanumeros_separados2(listanum2)
-    print(listanum1)
+                if cont_operadores == 3:
+                    print(pos_mais)
+                    listanum.append(atual[atual.index('+') + 1:pos_mais])
+                    listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
+                elif cont_operadores >= 4:
+                    print(pos_mais)
+                # Adicionar os números entre o primeiro número e último número a uma nova lista
+                # if pos_mais == lista_pos_operadores[1]:
+                #     print('oi')
+                #     print(pos_mais)
+    print(listanum)
     print(lista_pos_operadores)
 
 
 def res():
     ecra.insert(0, '=')
     atual = str(ecra.get())
+    resultado = 0
     valor_i = '='
     for a in valor_i:
         atual = atual.replace(a, '')
     listanumeros_separados1(atual)
     ecra.delete(0, END)
+    # for num in listanum:
+    #     num = int(num)
+    #     resultado += num
+    # ecra.insert(0, resultado)
+    # listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
