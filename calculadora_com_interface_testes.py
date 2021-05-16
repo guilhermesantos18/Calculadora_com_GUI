@@ -61,7 +61,9 @@ def listanumeros_separados1(atual):
     # entre os operadores e guarda-los numa lista
     print(atual)
     cont_operadores = 0
+    cont_operadores_entre_primeiromais_ultimomais = 0
     lista_pos_operadores = []
+    lista_pos_operadores_entre_primeiromais_ultimomais = []
     # Se existir um + em atual
     if '+' in atual:
         # Pegar todas as posições dos operadores
@@ -74,35 +76,43 @@ def listanumeros_separados1(atual):
         # Para cada posição dos operadores, vou verificar se a sua posição,
         # É igual á posição do primeiro operador, se a posição é igual há,
         # de o último operador e se a posição dos restantes operadores está entre,
-        # a primeira posição e a última posição se isso acontecer os numeros entre
-        # a primeira posição e a última posição serão adicionados a outra lista.
+        # a primeira posição e a última posição
         for pos_mais in lista_pos_operadores:
             if pos_mais == atual.index('+'):
                 listanum.append(atual[:pos_mais])
-                # Entra aqui nesta situação 10+15 só existe um mais e com esta condição consigu,
-                # Com que adicione o número há direita do primeiro mais seja adicionado há lista
+                # Entra aqui nesta situação 10+15 só existe um + e com esta condição consigu,
+                # Com que adicione o número há direita do primeiro + seja adicionado há lista
                 if cont_operadores == 1:
                     listanum.append(atual[pos_mais + 1:])
-                # Entra aqui nesta situação 10+15+16 só existem dois mais e com esta condição consigu,
-                # Com que adicione o número entre primeiro mais e o último mais seja adicionado há lista
+                # Entra aqui nesta situação 10+15+16 só existem dois + e com esta condição consigu,
+                # Com que adicione o número entre o primeiro mais e o último + seja adicionado há lista
                 elif cont_operadores == 2:
                     listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
-            # Senão se a posição de o último operador for igual ao último valor de lista_pos_operadores
+            # Senão se a posição de o último + for igual ao último valor de lista_pos_operadores
             # adiciona dessa posição (pos_mais) até ao fim
             elif pos_mais == lista_pos_operadores[-1]:
                 listanum.append(atual[pos_mais + 1:])
-            elif pos_mais > atual.index('+') and pos_mais < lista_pos_operadores[-1]:
+            # Senão se a posição do + for maior que a primeira posição e menor que a ultima posição ou seja são
+            # as posições entre a primeira e última posições
+            elif atual.index('+') < pos_mais < lista_pos_operadores[-1]:
+                # Entra aqui nesta situação 10+15+16+13 quando existem tres +
                 if cont_operadores == 3:
-                    print(pos_mais)
+                    # Adicona o número há direita do primeiro +
                     listanum.append(atual[atual.index('+') + 1:pos_mais])
+                    # Adiciona o número há esquerda do último +
                     listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
                 elif cont_operadores >= 4:
-                    print(pos_mais)
+                    lista_pos_operadores_entre_primeiromais_ultimomais.append(pos_mais)
+                    cont_operadores_entre_primeiromais_ultimomais += 1
+        if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
+            for pos in lista_pos_operadores_entre_primeiromais_ultimomais:
+                print(pos)
                 # Adicionar os números entre o primeiro número e último número a uma nova lista
                 # if pos_mais == lista_pos_operadores[1]:
                 #     print('oi')
                 #     print(pos_mais)
     print(listanum)
+    print(lista_pos_operadores_entre_primeiromais_ultimomais)
     print(lista_pos_operadores)
 
 
