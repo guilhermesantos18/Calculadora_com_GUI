@@ -22,10 +22,16 @@ def inserir_numeros(numero):
     atual = ecra.get()
     ecra.delete(0, END)
     ecra.insert(0, str(atual) + str(numero))
+    # Verificar se foi atingido o número máximo de numeros no ecra
+    # Se isso acontecer apaga tudo
+    if len(ecra.get()) >= 25:
+        ecra.delete(0, END)
 
 
+# Limpar o ecra da calculadora e limpar a lista
 def delete():
     ecra.delete(0, END)
+    listanum.clear()
 
 
 def digitar_a(adicao):
@@ -33,13 +39,6 @@ def digitar_a(adicao):
     atual = ecra.get()
     ecra.delete(0, END)
     ecra.insert(0, str(atual) + adicao)
-    atual_a = ecra.get()
-    for num in atual_a:
-        if num == '+':
-            num_a += 1
-    print(num_a)
-    if num_a >= 1:
-        um_a(num_a)
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
@@ -51,64 +50,91 @@ def digitar_s(subtracao):
     atual = ecra.get()
     ecra.delete(0, END)
     ecra.insert(0, str(atual) + subtracao)
-    atual_s = ecra.get()
-    for num in atual_s:
-        if num == '-':
-            num_s += 1
-    if num_s == 1:
-        um_s(num_s)
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
         ecra.delete(0, END)
 
 
-def um_a(num_a):
-    global index_a1
-    if num_a == 1:
-        atual = str(ecra.get())
-        index_a1 = atual.index('+')
-        listanum.append(atual[:index_a1])
-        listanum.append('+')
-    elif num_a > 1:
-        atual = str(ecra.get())
-        index_a2 = atual.index('+')
-        print(index_a2)
-        listanum.append(atual[index_a1+1:index_a2])
-        listanum.append('+')
+def listanumeros_separados(atual):
+    # Verificar as posições de os operadores e adicionar os números
+    # entre os operadores e guarda-los numa lista
+    print(atual)
+    cont_operadores = 0
+    cont_operadores_entre_primeiromais_ultimomais = 0
+    lista_pos_operadores = []
+    lista_pos_operadores_entre_primeiromais_ultimomais = []
+    # Se existir um + em atual
+    if '+' in atual:
+        # Pegar todas as posições dos operadores
+        for pos in range(0, len(atual)):
+            if atual[pos] == '+':
+                # Contador para ajudar na adição de os números há lista entre os operadores
+                cont_operadores += 1
+                lista_pos_operadores.append(pos)
+
+        # Para cada posição dos operadores, vou verificar se a sua posição,
+        # É igual á posição do primeiro operador, se a posição é igual há,
+        # de o último operador e se a posição dos restantes operadores está entre,
+        # a primeira posição e a última posição
+        for pos_mais in lista_pos_operadores:
+            if pos_mais == atual.index('+'):
+                listanum.append(atual[:pos_mais])
+                # Entra aqui nesta situação 10+15 só existe um + e com esta condição consigu,
+                # Com que adicione o número há direita do primeiro + seja adicionado há lista
+                if cont_operadores == 1:
+                    listanum.append(atual[pos_mais + 1:])
+                # Entra aqui nesta situação 10+15+16 só existem dois + e com esta condição consigu,
+                # Com que adicione o número entre o primeiro mais e o último + seja adicionado há lista
+                elif cont_operadores == 2:
+                    listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
+            # Senão se a posição de o último + for igual ao último valor de lista_pos_operadores
+            # adiciona dessa posição (pos_mais) até ao fim
+            elif pos_mais == lista_pos_operadores[-1]:
+                listanum.append(atual[pos_mais + 1:])
+            # Senão se a posição do + for maior que a primeira posição e menor que a ultima posição ou seja são
+            # as posições entre a primeira e última posições
+            elif atual.index('+') < pos_mais < lista_pos_operadores[-1]:
+                # Entra aqui nesta situação 10+15+16+13 quando existem tres +
+                if cont_operadores == 3:
+                    # Adicona o número há direita do primeiro +
+                    listanum.append(atual[atual.index('+') + 1:pos_mais])
+                    # Adiciona o número há esquerda do último +
+                    listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
+                elif cont_operadores >= 4:
+                    lista_pos_operadores_entre_primeiromais_ultimomais.append(pos_mais)
+                    cont_operadores_entre_primeiromais_ultimomais += 1
+        if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
+            pos_mais_seguinte = 0
+            print(len(lista_pos_operadores_entre_primeiromais_ultimomais))
+            for pos in range(len(lista_pos_operadores_entre_primeiromais_ultimomais)):
+                print(pos)
+                pos_mais_seguinte += 1
+                if pos <= len(lista_pos_operadores_entre_primeiromais_ultimomais) - 2:
+                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores_entre_primeiromais_ultimomais[pos + pos_mais_seguinte]])
+                elif pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
+                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores[-1]])
+                if pos_mais_seguinte == 1:
+                    pos_mais_seguinte = 0
     print(listanum)
-
-
-def um_s(num_s):
-    if num_s == 1:
-        atual = str(ecra.get())
-        print(atual)
-        index_s = atual.index('-')
-        listanum.append(atual[:index_s])
-    print(listanum)
-
+    print(lista_pos_operadores_entre_primeiromais_ultimomais)
+    print(lista_pos_operadores)
 
 
 def res():
-    resultado = 0
     ecra.insert(0, '=')
+    atual = str(ecra.get())
+    resultado = 0
     valor_i = '='
-
-    if numero_a >= 1:
-        print('ola')
-        for num in numeros:
-            if num.isnumeric():
-                listanum.append(int(num))
-            elif num == '+':
-                listanum.append(num)
-
-    print(listanum)
-    numero_i = numeros.count('=')
-    if numero_i == 1:
-        for a in valor_i:
-            numeros = numeros.replace(a, '')
-            listanum.append(int(numeros))
+    for a in valor_i:
+        atual = atual.replace(a, '')
+    listanumeros_separados(atual)
     ecra.delete(0, END)
+    # for num in listanum:
+    #     num = int(num)
+    #     resultado += num
+    # ecra.insert(0, resultado)
+    # listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
