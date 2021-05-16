@@ -56,7 +56,7 @@ def digitar_s(subtracao):
         ecra.delete(0, END)
 
 
-def listanumeros_separados1(atual):
+def listanumeros_separados(atual):
     # Verificar as posições de os operadores e adicionar os números
     # entre os operadores e guarda-los numa lista
     print(atual)
@@ -105,12 +105,17 @@ def listanumeros_separados1(atual):
                     lista_pos_operadores_entre_primeiromais_ultimomais.append(pos_mais)
                     cont_operadores_entre_primeiromais_ultimomais += 1
         if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
-            for pos in lista_pos_operadores_entre_primeiromais_ultimomais:
+            pos_mais_seguinte = 0
+            print(len(lista_pos_operadores_entre_primeiromais_ultimomais))
+            for pos in range(len(lista_pos_operadores_entre_primeiromais_ultimomais)):
                 print(pos)
-                # Adicionar os números entre o primeiro número e último número a uma nova lista
-                # if pos_mais == lista_pos_operadores[1]:
-                #     print('oi')
-                #     print(pos_mais)
+                pos_mais_seguinte += 1
+                if pos <= len(lista_pos_operadores_entre_primeiromais_ultimomais) - 2:
+                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores_entre_primeiromais_ultimomais[pos + pos_mais_seguinte]])
+                elif pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
+                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores[-1]])
+                if pos_mais_seguinte == 1:
+                    pos_mais_seguinte = 0
     print(listanum)
     print(lista_pos_operadores_entre_primeiromais_ultimomais)
     print(lista_pos_operadores)
@@ -123,7 +128,7 @@ def res():
     valor_i = '='
     for a in valor_i:
         atual = atual.replace(a, '')
-    listanumeros_separados1(atual)
+    listanumeros_separados(atual)
     ecra.delete(0, END)
     # for num in listanum:
     #     num = int(num)
