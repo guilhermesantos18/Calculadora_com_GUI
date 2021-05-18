@@ -88,10 +88,6 @@ def listanumeros_separados(atual):
                 # Com que adicione o número entre o primeiro mais e o último + seja adicionado há lista
                 elif cont_operadores == 2:
                     listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
-            # Senão se a posição de o último + for igual ao último valor de lista_pos_operadores
-            # adiciona dessa posição (pos_mais) até ao fim
-            elif pos_mais == lista_pos_operadores[-1]:
-                listanum.append(atual[pos_mais + 1:])
             # Senão se a posição do + for maior que a primeira posição e menor que a ultima posição ou seja são
             # as posições entre a primeira e última posições
             elif atual.index('+') < pos_mais < lista_pos_operadores[-1]:
@@ -107,17 +103,24 @@ def listanumeros_separados(atual):
         if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
             pos_mais_seguinte = 0
             print(len(lista_pos_operadores_entre_primeiromais_ultimomais))
+            print(lista_pos_operadores_entre_primeiromais_ultimomais)
             for pos in range(len(lista_pos_operadores_entre_primeiromais_ultimomais)):
                 print(pos)
                 pos_mais_seguinte += 1
-                if pos <= len(lista_pos_operadores_entre_primeiromais_ultimomais) - 2:
-                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores_entre_primeiromais_ultimomais[pos + pos_mais_seguinte]])
-                elif pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
-                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores[-1]])
+                # if pos <= len(lista_pos_operadores_entre_primeiromais_ultimomais) - 2:
+                #     listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores_entre_primeiromais_ultimomais[pos + pos_mais_seguinte]])
+                if pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
+                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:lista_pos_operadores[-1]])
+                elif pos == lista_pos_operadores_entre_primeiromais_ultimomais[0]:
+                    listanum.append(atual[atual.index('+') + 1:pos])
                 if pos_mais_seguinte == 1:
                     pos_mais_seguinte = 0
+        for pos_mais in lista_pos_operadores:
+            # Senão se a posição de o último + for igual ao último valor de lista_pos_operadores
+            # adiciona dessa posição (pos_mais) até ao fim
+            if pos_mais == lista_pos_operadores[-1]:
+                listanum.append(atual[pos_mais + 1:])
     print(listanum)
-    print(lista_pos_operadores_entre_primeiromais_ultimomais)
     print(lista_pos_operadores)
 
 
