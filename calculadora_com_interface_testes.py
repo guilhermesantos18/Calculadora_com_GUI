@@ -175,9 +175,15 @@ def res():
         atual = atual.replace(a, '')
     listanumeros_separados(atual)
     ecra.delete(0, END)
-    for num in listanum:
-        num = int(num)
-        resultado += num
+    if '+' in atual:
+        for num in listanum:
+            num = int(num)
+            resultado += num
+    elif '-' in atual:
+        resultado = int(listanum[0])
+        for num in listanum[1:]:
+            num = int(num)
+            resultado -= num
     ecra.insert(0, resultado)
     listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
