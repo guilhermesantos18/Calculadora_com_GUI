@@ -101,27 +101,20 @@ def listanumeros_separados(atual):
                     lista_pos_operadores_entre_primeiromais_ultimomais.append(pos_mais)
                     cont_operadores_entre_primeiromais_ultimomais += 1
         if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
-            pos_mais_seguinte = 0
-            print(len(lista_pos_operadores_entre_primeiromais_ultimomais))
-            print(lista_pos_operadores_entre_primeiromais_ultimomais)
             for pos in range(len(lista_pos_operadores_entre_primeiromais_ultimomais)):
-                print(pos)
-                pos_mais_seguinte += 1
-                # if pos <= len(lista_pos_operadores_entre_primeiromais_ultimomais) - 2:
-                #     listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos]:lista_pos_operadores_entre_primeiromais_ultimomais[pos + pos_mais_seguinte]])
-                if pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
+                if lista_pos_operadores_entre_primeiromais_ultimomais[pos] == lista_pos_operadores[1]:
+                    listanum.append(atual[atual.index('+') + 1:lista_pos_operadores_entre_primeiromais_ultimomais[pos]])
+                if pos <= len(lista_pos_operadores_entre_primeiromais_ultimomais) - 2:
+                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:lista_pos_operadores_entre_primeiromais_ultimomais[pos + 1]])
+                elif pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
                     listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:lista_pos_operadores[-1]])
-                elif pos == lista_pos_operadores_entre_primeiromais_ultimomais[0]:
-                    listanum.append(atual[atual.index('+') + 1:pos])
-                if pos_mais_seguinte == 1:
-                    pos_mais_seguinte = 0
-        for pos_mais in lista_pos_operadores:
-            # Senão se a posição de o último + for igual ao último valor de lista_pos_operadores
-            # adiciona dessa posição (pos_mais) até ao fim
-            if pos_mais == lista_pos_operadores[-1]:
-                listanum.append(atual[pos_mais + 1:])
+        if cont_operadores >= 2:
+            for pos_mais in lista_pos_operadores:
+                # Senão se a posição de o último + for igual ao último valor de lista_pos_operadores
+                # adiciona dessa posição (pos_mais) até ao fim
+                if pos_mais == lista_pos_operadores[-1]:
+                    listanum.append(atual[pos_mais + 1:])
     print(listanum)
-    print(lista_pos_operadores)
 
 
 def res():
@@ -133,11 +126,11 @@ def res():
         atual = atual.replace(a, '')
     listanumeros_separados(atual)
     ecra.delete(0, END)
-    # for num in listanum:
-    #     num = int(num)
-    #     resultado += num
-    # ecra.insert(0, resultado)
-    # listanum.clear()
+    for num in listanum:
+        num = int(num)
+        resultado += num
+    ecra.insert(0, resultado)
+    listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
