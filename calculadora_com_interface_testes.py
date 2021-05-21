@@ -70,7 +70,6 @@ def listanumeros_separados(atual):
                 # Contador para ajudar na adição de os números há lista entre os operadores
                 cont_operadores += 1
                 lista_pos_operadores.append(pos)
-
         # Para cada posição dos operadores, vou verificar se a sua posição,
         # É igual á posição do primeiro operador, se a posição é igual há,
         # de o último operador e se a posição dos restantes operadores está entre,
@@ -166,6 +165,19 @@ def listanumeros_separados(atual):
     print(listanum)
 
 
+# Verificar operadores para que quando o usuário digitar por exemplo,
+# 3+-* ou seja digitar mais de 1 operador para realizar a conta aparecer
+# no ecra 'Número Inválido'
+def verificar_operadores(atual):
+    lista_pos_operadores = []
+    for pos in range(0, len(atual)):
+        if atual[pos] == '-' or atual[pos] == '+' or atual[pos] == '*' or atual[pos] == '/':
+            lista_pos_operadores.append(pos)
+    for pos_operadores in lista_pos_operadores:
+        if atual[pos_operadores + 1] == '+' or atual[pos_operadores + 1] == '-':
+            ecra.insert(0, 'Número Inválido')
+            
+
 def res():
     ecra.insert(0, '=')
     atual = str(ecra.get())
@@ -175,16 +187,17 @@ def res():
         atual = atual.replace(a, '')
     listanumeros_separados(atual)
     ecra.delete(0, END)
-    if '+' in atual:
-        for num in listanum:
-            num = int(num)
-            resultado += num
-    elif '-' in atual:
-        resultado = int(listanum[0])
-        for num in listanum[1:]:
-            num = int(num)
-            resultado -= num
-    ecra.insert(0, resultado)
+    verificar_operadores(atual)
+    # if '+' in atual:
+    #     for num in listanum:
+    #         num = int(num)
+    #         resultado += num
+    # elif '-' in atual:
+    #     resultado = int(listanum[0])
+    #     for num in listanum[1:]:
+    #         num = int(num)
+    #         resultado -= num
+    # ecra.insert(0, resultado)
     listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
@@ -220,7 +233,7 @@ btn_9 = tk.Button(text='9', width=5, relief=tk.GROOVE, borderwidth=2, bg='white'
 # (a - adição)
 # (i - igual)
 # (div - divisão)
-btn_div = tk.Button(text=':', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
+btn_div = tk.Button(text='/', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_x = tk.Button(text='x', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_s = tk.Button(text='-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_s('-'))
 btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_a('+'))
