@@ -1,5 +1,2 @@
-numeros = [2, 3, 5, 7, 54, 6]
-resultado = numeros[0]
-for num in numeros[1:]:
-    resultado -= num
+resultado = eval('(12/4)*2')
 print(resultado)

@@ -3,6 +3,10 @@ from tkinter import END
 import tkinter.font as font
 
 listanum = []
+# Contador para ajudar na adição de os números há lista entre os operadores e para verificar se só existem mais no conta
+cont_operadores_mais = 0
+# Contador para ajudar na adição de os números há lista entre os operadores e para verificar se só existem menos no conta
+cont_operadores_menos = 0
 
 
 # Configurações da janela principal, tamanho, titulo, configurações
@@ -34,20 +38,22 @@ def delete():
     listanum.clear()
 
 
-def digitar_a(adicao):
+def digitar_a(adicao, cont_operadores_mais):
     atual = ecra.get()
     ecra.delete(0, END)
     ecra.insert(0, str(atual) + adicao)
+    cont_operadores_mais += 1
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
         ecra.delete(0, END)
 
 
-def digitar_s(subtracao):
+def digitar_s(subtracao, cont_operadores_menos):
     atual = ecra.get()
     ecra.delete(0, END)
     ecra.insert(0, str(atual) + subtracao)
+    cont_operadores_menos += 1
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
@@ -58,17 +64,15 @@ def listanumeros_separados(atual):
     # Verificar as posições de os operadores e adicionar os números
     # entre os operadores e guarda-los numa lista
     print(atual)
-    cont_operadores = 0
     cont_operadores_entre_primeiromais_ultimomais = 0
     lista_pos_operadores = []
     lista_pos_operadores_entre_primeiromais_ultimomais = []
     # Se existir um + em atual
-    if '+' in atual:
+    if cont_operadores_mais >= 1 and cont_operadores_menos == 0:
         # Pegar todas as posições dos operadores
         for pos in range(0, len(atual)):
             if atual[pos] == '+':
-                # Contador para ajudar na adição de os números há lista entre os operadores
-                cont_operadores += 1
+                # Contador para ajudar na adição de os números há lista entre os operadores e para verificar se só existem mais no conta
                 lista_pos_operadores.append(pos)
         # Para cada posição dos operadores, vou verificar se a sua posição,
         # É igual á posição do primeiro operador, se a posição é igual há,
@@ -79,22 +83,22 @@ def listanumeros_separados(atual):
                 listanum.append(atual[:pos_mais])
                 # Entra aqui nesta situação 10+15 só existe um + e com esta condição consigu,
                 # Com que adicione o número há direita do primeiro + seja adicionado há lista
-                if cont_operadores == 1:
+                if cont_operadores_mais == 1:
                     listanum.append(atual[pos_mais + 1:])
                 # Entra aqui nesta situação 10+15+16 só existem dois + e com esta condição consigu,
                 # Com que adicione o número entre o primeiro mais e o último + seja adicionado há lista
-                elif cont_operadores == 2:
+                elif cont_operadores_mais == 2:
                     listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
             # Senão se a posição do + for maior que a primeira posição e menor que a ultima posição ou seja são
             # as posições entre a primeira e última posições
             elif atual.index('+') < pos_mais < lista_pos_operadores[-1]:
                 # Entra aqui nesta situação 10+15+16+13 quando existem tres +
-                if cont_operadores == 3:
+                if cont_operadores_mais == 3:
                     # Adicona o número há direita do primeiro +
                     listanum.append(atual[atual.index('+') + 1:pos_mais])
                     # Adiciona o número há esquerda do último +
                     listanum.append(atual[pos_mais + 1:lista_pos_operadores[-1]])
-                elif cont_operadores >= 4:
+                elif cont_operadores_mais >= 4:
                     lista_pos_operadores_entre_primeiromais_ultimomais.append(pos_mais)
                     cont_operadores_entre_primeiromais_ultimomais += 1
         if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
@@ -105,18 +109,16 @@ def listanumeros_separados(atual):
                     listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:lista_pos_operadores_entre_primeiromais_ultimomais[pos + 1]])
                 elif pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
                     listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:lista_pos_operadores[-1]])
-        if cont_operadores >= 2:
+        if cont_operadores_mais >= 2:
             for pos_mais in lista_pos_operadores:
-                # Senão se a posição de o último + for igual ao último valor de lista_pos_operadores
+                # Se a posição de o último + for igual ao último valor de lista_pos_operadores
                 # adiciona dessa posição (pos_mais) até ao fim
                 if pos_mais == lista_pos_operadores[-1]:
                     listanum.append(atual[pos_mais + 1:])
-    elif '-' in atual:
+    if cont_operadores_menos >= 1 and cont_operadores_mais == 0:
         # Pegar todas as posições dos operadores
         for pos in range(0, len(atual)):
             if atual[pos] == '-':
-                # Contador para ajudar na adição de os números há lista entre os operadores
-                cont_operadores += 1
                 lista_pos_operadores.append(pos)
 
         # Para cada posição dos operadores, vou verificar se a sua posição,
@@ -128,22 +130,22 @@ def listanumeros_separados(atual):
                 listanum.append(atual[:pos_menos])
                 # Entra aqui nesta situação 10-15 só existe um - e com esta condição consigu,
                 # Com que adicione o número há direita do primeiro - seja adicionado há lista
-                if cont_operadores == 1:
+                if cont_operadores_menos == 1:
                     listanum.append(atual[pos_menos + 1:])
                 # Entra aqui nesta situação 10-15-16 só existem dois - e com esta condição consigu,
                 # Com que adicione o número entre o primeiro mais e o último - seja adicionado há lista
-                elif cont_operadores == 2:
+                elif cont_operadores_menos == 2:
                     listanum.append(atual[pos_menos + 1:lista_pos_operadores[-1]])
             # Senão se a posição do - for maior que a primeira posição e menor que a ultima posição ou seja são
             # as posições entre a primeira e última posições
             elif atual.index('-') < pos_menos < lista_pos_operadores[-1]:
                 # Entra aqui nesta situação 10-15-16-13 quando existem tres -
-                if cont_operadores == 3:
+                if cont_operadores_menos == 3:
                     # Adicona o número há direita do primeiro -
                     listanum.append(atual[atual.index('-') + 1:pos_menos])
                     # Adiciona o número há esquerda do último -
                     listanum.append(atual[pos_menos + 1:lista_pos_operadores[-1]])
-                elif cont_operadores >= 4:
+                elif cont_operadores_menos >= 4:
                     lista_pos_operadores_entre_primeiromais_ultimomais.append(pos_menos)
                     cont_operadores_entre_primeiromais_ultimomais += 1
         if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
@@ -156,7 +158,7 @@ def listanumeros_separados(atual):
                 elif pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
                     listanum.append(
                         atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:lista_pos_operadores[-1]])
-        if cont_operadores >= 2:
+        if cont_operadores_menos >= 2:
             for pos_mais in lista_pos_operadores:
                 # Senão se a posição de o último - for igual ao último valor de lista_pos_operadores
                 # adiciona dessa posição (pos_mais) até ao fim
@@ -173,10 +175,11 @@ def verificar_operadores(atual):
     for pos in range(0, len(atual)):
         if atual[pos] == '-' or atual[pos] == '+' or atual[pos] == '*' or atual[pos] == '/':
             lista_pos_operadores.append(pos)
-    for pos_operadores in lista_pos_operadores:
+    print(lista_pos_operadores)
+    for pos_operadores in lista_pos_operadores[:-1]:
         if atual[pos_operadores + 1] == '+' or atual[pos_operadores + 1] == '-':
             ecra.insert(0, 'Número Inválido')
-            
+
 
 def res():
     ecra.insert(0, '=')
@@ -188,16 +191,17 @@ def res():
     listanumeros_separados(atual)
     ecra.delete(0, END)
     verificar_operadores(atual)
-    # if '+' in atual:
-    #     for num in listanum:
-    #         num = int(num)
-    #         resultado += num
-    # elif '-' in atual:
-    #     resultado = int(listanum[0])
-    #     for num in listanum[1:]:
-    #         num = int(num)
-    #         resultado -= num
-    # ecra.insert(0, resultado)
+    if '+' in atual:
+        for num in listanum:
+            num = int(num)
+            resultado += num
+    elif '-' in atual:
+        print('ola')
+        resultado = int(listanum[0])
+        for num in listanum[1:]:
+            num = int(num)
+            resultado -= num
+    ecra.insert(0, resultado)
     listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
@@ -235,13 +239,13 @@ btn_9 = tk.Button(text='9', width=5, relief=tk.GROOVE, borderwidth=2, bg='white'
 # (div - divisão)
 btn_div = tk.Button(text='/', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_x = tk.Button(text='x', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
-btn_s = tk.Button(text='-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_s('-'))
-btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_a('+'))
+btn_s = tk.Button(text='-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_s('-', cont_operadores_mais))
+btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_a('+', cont_operadores_menos))
 btn_i = tk.Button(text='=', width=5, relief=tk.GROOVE, borderwidth=2, bg='#66C4F2', font=font, command=res)
 
 # Adicionar icon ao botão delete
 icon_delete = tk.PhotoImage(
-    file='C:\Programação e Projetos\Python\Tkinter\Calculadora_com_GUI\Icon\outline_backspace_black_24dp.gif')
+    file='C:\Programação e Projetos\Linguagens que mais uso e trabalho\Python\Tkinter\Calculadora_com_GUI\Icon\outline_backspace_black_24dp.gif')
 
 # Outros Botões
 # (n - positvo ou negativo)
