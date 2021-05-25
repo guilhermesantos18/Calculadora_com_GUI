@@ -3,10 +3,7 @@ from tkinter import END
 import tkinter.font as font
 
 listanum = []
-# Contador para ajudar na adição de os números há lista entre os operadores e para verificar se só existem mais no conta
-cont_operadores_mais = 0
-# Contador para ajudar na adição de os números há lista entre os operadores e para verificar se só existem menos no conta
-cont_operadores_menos = 0
+
 
 
 # Configurações da janela principal, tamanho, titulo, configurações
@@ -38,42 +35,46 @@ def delete():
     listanum.clear()
 
 
-def digitar_a(adicao, cont_operadores_mais):
-    atual = ecra.get()
+def digitar_a(adicao):
+    atual = str(ecra.get())
     ecra.delete(0, END)
-    ecra.insert(0, str(atual) + adicao)
-    cont_operadores_mais += 1
+    ecra.insert(0, atual + adicao)
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
         ecra.delete(0, END)
 
 
-def digitar_s(subtracao, cont_operadores_menos):
-    atual = ecra.get()
+def digitar_s(subtracao):
+    atual = str(ecra.get())
     ecra.delete(0, END)
-    ecra.insert(0, str(atual) + subtracao)
-    cont_operadores_menos += 1
+    ecra.insert(0, atual + subtracao)
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
         ecra.delete(0, END)
 
 
-def listanumeros_separados(atual):
+def listanumeros_separados_para_um_operador(atual):
     # Verificar as posições de os operadores e adicionar os números
     # entre os operadores e guarda-los numa lista
+    cont_operadores_mais = cont_operadores_menos = 0
     print(atual)
-    cont_operadores_entre_primeiromais_ultimomais = 0
     lista_pos_operadores = []
-    lista_pos_operadores_entre_primeiromais_ultimomais = []
-    # Se existir um + em atual
+    # Pegar todas as posições do +
+    for pos in range(0, len(atual)):
+        # Pegar todas as posições do +
+        if atual[pos] == '+':
+            cont_operadores_mais += 1
+            # Contador para ajudar na adição de os números há lista entre os +
+        # Pegar todas as posições do -
+        elif atual[pos] == '-':
+            cont_operadores_menos += 1
+        lista_pos_operadores.append(pos)
+    # Entra aqui se só existir +
     if cont_operadores_mais >= 1 and cont_operadores_menos == 0:
-        # Pegar todas as posições dos operadores
-        for pos in range(0, len(atual)):
-            if atual[pos] == '+':
-                # Contador para ajudar na adição de os números há lista entre os operadores e para verificar se só existem mais no conta
-                lista_pos_operadores.append(pos)
+        cont_operadores_entre_primeiromais_ultimomais = 0
+        lista_pos_operadores_entre_primeiromais_ultimomais = []
         # Para cada posição dos operadores, vou verificar se a sua posição,
         # É igual á posição do primeiro operador, se a posição é igual há,
         # de o último operador e se a posição dos restantes operadores está entre,
@@ -115,12 +116,10 @@ def listanumeros_separados(atual):
                 # adiciona dessa posição (pos_mais) até ao fim
                 if pos_mais == lista_pos_operadores[-1]:
                     listanum.append(atual[pos_mais + 1:])
+    # Entra aqui se só existir -
     if cont_operadores_menos >= 1 and cont_operadores_mais == 0:
-        # Pegar todas as posições dos operadores
-        for pos in range(0, len(atual)):
-            if atual[pos] == '-':
-                lista_pos_operadores.append(pos)
-
+        cont_operadores_entre_primeiromenos_ultimomenos = 0
+        lista_pos_operadores_entre_primeiromenos_ultimomenos = []
         # Para cada posição dos operadores, vou verificar se a sua posição,
         # É igual á posição do primeiro operador, se a posição é igual há,
         # de o último operador e se a posição dos restantes operadores está entre,
@@ -146,18 +145,18 @@ def listanumeros_separados(atual):
                     # Adiciona o número há esquerda do último -
                     listanum.append(atual[pos_menos + 1:lista_pos_operadores[-1]])
                 elif cont_operadores_menos >= 4:
-                    lista_pos_operadores_entre_primeiromais_ultimomais.append(pos_menos)
-                    cont_operadores_entre_primeiromais_ultimomais += 1
-        if cont_operadores_entre_primeiromais_ultimomais == len(lista_pos_operadores_entre_primeiromais_ultimomais):
-            for pos in range(len(lista_pos_operadores_entre_primeiromais_ultimomais)):
-                if lista_pos_operadores_entre_primeiromais_ultimomais[pos] == lista_pos_operadores[1]:
-                    listanum.append(atual[atual.index('-') + 1:lista_pos_operadores_entre_primeiromais_ultimomais[pos]])
-                if pos <= len(lista_pos_operadores_entre_primeiromais_ultimomais) - 2:
-                    listanum.append(atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:
-                                          lista_pos_operadores_entre_primeiromais_ultimomais[pos + 1]])
-                elif pos == len(lista_pos_operadores_entre_primeiromais_ultimomais) - 1:
+                    lista_pos_operadores_entre_primeiromenos_ultimomenos.append(pos_menos)
+                    cont_operadores_entre_primeiromenos_ultimomenos += 1
+        if cont_operadores_entre_primeiromenos_ultimomenos == len(lista_pos_operadores_entre_primeiromenos_ultimomenos):
+            for pos in range(len(lista_pos_operadores_entre_primeiromenos_ultimomenos)):
+                if lista_pos_operadores_entre_primeiromenos_ultimomenos[pos] == lista_pos_operadores[1]:
+                    listanum.append(atual[atual.index('-') + 1:lista_pos_operadores_entre_primeiromenos_ultimomenos[pos]])
+                if pos <= len(lista_pos_operadores_entre_primeiromenos_ultimomenos) - 2:
+                    listanum.append(atual[lista_pos_operadores_entre_primeiromenos_ultimomenos[pos] + 1:
+                                          lista_pos_operadores_entre_primeiromenos_ultimomenos[pos + 1]])
+                elif pos == len(lista_pos_operadores_entre_primeiromenos_ultimomenos) - 1:
                     listanum.append(
-                        atual[lista_pos_operadores_entre_primeiromais_ultimomais[pos] + 1:lista_pos_operadores[-1]])
+                        atual[lista_pos_operadores_entre_primeiromenos_ultimomenos[pos] + 1:lista_pos_operadores[-1]])
         if cont_operadores_menos >= 2:
             for pos_mais in lista_pos_operadores:
                 # Senão se a posição de o último - for igual ao último valor de lista_pos_operadores
@@ -188,7 +187,8 @@ def res():
     valor_i = '='
     for a in valor_i:
         atual = atual.replace(a, '')
-    listanumeros_separados(atual)
+
+    listanumeros_separados_para_um_operador(atual)
     ecra.delete(0, END)
     verificar_operadores(atual)
     if '+' in atual:
@@ -196,12 +196,12 @@ def res():
             num = int(num)
             resultado += num
     elif '-' in atual:
-        print('ola')
         resultado = int(listanum[0])
         for num in listanum[1:]:
             num = int(num)
             resultado -= num
     ecra.insert(0, resultado)
+
     listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
@@ -239,8 +239,8 @@ btn_9 = tk.Button(text='9', width=5, relief=tk.GROOVE, borderwidth=2, bg='white'
 # (div - divisão)
 btn_div = tk.Button(text='/', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
 btn_x = tk.Button(text='x', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font)
-btn_s = tk.Button(text='-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_s('-', cont_operadores_mais))
-btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_a('+', cont_operadores_menos))
+btn_s = tk.Button(text='-', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_s('-'))
+btn_a = tk.Button(text='+', width=5, relief=tk.GROOVE, borderwidth=2, bg='#C4CBCA', font=font, command=lambda: digitar_a('+'))
 btn_i = tk.Button(text='=', width=5, relief=tk.GROOVE, borderwidth=2, bg='#66C4F2', font=font, command=res)
 
 # Adicionar icon ao botão delete
