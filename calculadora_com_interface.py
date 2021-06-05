@@ -228,7 +228,7 @@ btn_i = tk.Button(text='=', width=5, relief=tk.GROOVE, borderwidth=2, bg='#66C4F
 
 # Adicionar icon ao botão delete
 icon_delete = tk.PhotoImage(
-    file='C:\Programação e Projetos\Python\Tkinter\Calculadora_com_GUI\Icon\outline_backspace_black_24dp.gif')
+    file='C:\Programação e Projetos\Linguagens que mais uso e trabalho\Python\Tkinter\Calculadora_com_GUI\Icon\outline_backspace_black_24dp.gif')
 
 # Outros Botões
 # (n - positvo ou negativo)

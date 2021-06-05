@@ -3,6 +3,9 @@ from tkinter import END
 import tkinter.font as font
 
 listanum = []
+cont_mais = 0
+cont_menos = 0
+entrou = False
 
 
 # Configurações da janela principal, tamanho, titulo, configurações
@@ -35,9 +38,11 @@ def delete():
 
 
 def digitar_a(adicao):
+    global cont_mais
     atual = str(ecra.get())
     ecra.delete(0, END)
     ecra.insert(0, atual + adicao)
+    cont_mais = 1
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
@@ -45,9 +50,11 @@ def digitar_a(adicao):
 
 
 def digitar_s(subtracao):
+    global cont_menos
     atual = str(ecra.get())
     ecra.delete(0, END)
     ecra.insert(0, atual + subtracao)
+    cont_menos = 1
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
     if len(ecra.get()) >= 25:
@@ -197,12 +204,18 @@ def listanumeros_separados_menos(atual):
 # 3+-* ou seja digitar mais de 1 operador para realizar a conta aparecer
 # no ecra 'Número Inválido'
 def verificar_operadores(atual):
+    global entrou, cont_menos, cont_mais
+    entrou = False
     lista_pos_operadores = []
     for pos in range(0, len(atual)):
         if atual[pos] == '-' or atual[pos] == '+' or atual[pos] == '*' or atual[pos] == '/':
             lista_pos_operadores.append(pos)
     for pos_operadores in lista_pos_operadores[:-1]:
         if atual[pos_operadores + 1] == '+' or atual[pos_operadores + 1] == '-':
+            entrou = True
+            cont_menos = cont_mais = 0
+            ecra.delete(0, END)
+            listanum.clear()
             ecra.insert(0, 'Número Inválido')
 
 
@@ -211,23 +224,31 @@ def res():
     atual = str(ecra.get())
     resultado = 0
     valor_i = '='
+    global cont_menos, cont_mais
     for a in valor_i:
         atual = atual.replace(a, '')
 
-    listanumeros_separados_mais(atual)
-    ecra.delete(0, END)
     verificar_operadores(atual)
-    if '+' in atual:
+
+    if cont_mais == 1 and cont_menos == 0:
+        listanumeros_separados_mais(atual)
+        ecra.delete(0, END)
         for num in listanum:
             num = int(num)
             resultado += num
-    elif '-' in atual:
+        cont_mais = 0
+
+    elif cont_mais == 0 and cont_menos == 1:
+        listanumeros_separados_menos(atual)
+        ecra.delete(0, END)
         resultado = int(listanum[0])
         for num in listanum[1:]:
             num = int(num)
             resultado -= num
-    ecra.insert(0, resultado)
+        cont_menos = 0
 
+    if not entrou:
+        ecra.insert(0, resultado)
     listanum.clear()
     # Verificar se foi atingido o número máximo de numeros no ecra
     # Se isso acontecer apaga tudo
