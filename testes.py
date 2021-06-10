@@ -1,2 +1,1 @@
-resultado = eval('(12/4)*2')
-print(resultado)
+print(eval('(5+3)-2'))
