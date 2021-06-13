@@ -195,7 +195,8 @@ def listanumeros_separados_menos(atual):
         if cont_operadores_entre_primeiromenos_ultimomenos == len(lista_pos_operadores_entre_primeiromenos_ultimomenos):
             for pos in range(len(lista_pos_operadores_entre_primeiromenos_ultimomenos)):
                 if lista_pos_operadores_entre_primeiromenos_ultimomenos[pos] == lista_pos_operadores[1]:
-                    listanum.append(atual[atual.index('-') + 1:lista_pos_operadores_entre_primeiromenos_ultimomenos[pos]])
+                    listanum.append(
+                        atual[atual.index('-') + 1:lista_pos_operadores_entre_primeiromenos_ultimomenos[pos]])
                 if pos <= len(lista_pos_operadores_entre_primeiromenos_ultimomenos) - 2:
                     listanum.append(atual[lista_pos_operadores_entre_primeiromenos_ultimomenos[pos] + 1:
                                           lista_pos_operadores_entre_primeiromenos_ultimomenos[pos + 1]])
@@ -349,7 +350,8 @@ def verificar_operadores(atual):
         if atual[pos] == '-' or atual[pos] == '+' or atual[pos] == 'x' or atual[pos] == '/':
             lista_pos_operadores.append(pos)
     for pos_operadores in lista_pos_operadores[:-1]:
-        if atual[pos_operadores + 1] == '+' or atual[pos_operadores + 1] == '-' or atual[pos_operadores + 1] == 'x' or atual[pos_operadores + 1] == '/':
+        if atual[pos_operadores + 1] == '+' or atual[pos_operadores + 1] == '-' or atual[pos_operadores + 1] == 'x' or \
+                atual[pos_operadores + 1] == '/':
             entrou = True
             cont_menos = cont_mais = 0
             ecra.delete(0, END)
