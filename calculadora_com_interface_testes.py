@@ -370,7 +370,6 @@ def res():
     verificar_operadores(atual)
     # Efetuar a soma dos números
     if cont_mais == 1 and cont_menos == 0 and cont_mult == 0 and cont_div == 0:
-        print('ola')
         listanumeros_separados_mais(atual)
         ecra.delete(0, END)
         for num in listanum:
