@@ -357,6 +357,7 @@ def verificar_operadores(atual):
             ecra.insert(0, 'Número Inválido')
 
 
+# Efetuar o cálculo
 def res():
     ecra.insert(0, '=')
     atual = str(ecra.get())
@@ -367,7 +368,7 @@ def res():
         atual = atual.replace(a, '')
 
     verificar_operadores(atual)
-
+    # Efetuar a soma dos números
     if cont_mais == 1 and cont_menos == 0 and cont_mult == 0 and cont_div == 0:
         print('ola')
         listanumeros_separados_mais(atual)
@@ -376,7 +377,7 @@ def res():
             num = int(num)
             resultado += num
         cont_mais = 0
-
+    # Efetuar a subtração dos números
     elif cont_mais == 0 and cont_menos == 1 and cont_mult == 0 and cont_div == 0:
         listanumeros_separados_menos(atual)
         ecra.delete(0, END)
@@ -385,7 +386,7 @@ def res():
             num = int(num)
             resultado -= num
         cont_menos = 0
-
+    # Efetuar a multiplicação dos números
     elif cont_mais == 0 and cont_menos == 0 and cont_mult == 1 and cont_div == 0:
         listanumeros_separados_multiplicacao(atual)
         ecra.delete(0, END)
@@ -394,7 +395,7 @@ def res():
             num = int(num)
             resultado *= num
         cont_mult = 0
-
+    # Efetuar a divisão dos números
     elif cont_mais == 0 and cont_menos == 0 and cont_mult == 0 and cont_div == 1:
         listanumeros_separados_divisao(atual)
         ecra.delete(0, END)
